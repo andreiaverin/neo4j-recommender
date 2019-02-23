@@ -1,4 +1,5 @@
-LOAD CSV WITH HEADERS FROM "file:///ImportData.csv" AS line FIELDTERMINATOR ';'
+// Import sample data
+LOAD CSV WITH HEADERS FROM "file:///https://github.com/andreiaverin/neo4j-recommender/blob/master/Source/SampleData.csv" AS line FIELDTERMINATOR ';'
 MERGE (c:Customer { name:line.firstName + ' ' + line.lastName })
 MERGE (p:Product { name:line.productName })
 MERGE (cat:Category { name:line.categoryName })
@@ -9,10 +10,12 @@ MERGE (p)-[:HAS_CAT]->(cat)
 MERGE (p)-[:MADE_BY]->(v)
 RETURN c, p, cat, v
 
+// Remove all nodes and relationships
 MATCH (n)
 OPTIONAL MATCH (n)-[r]-()
 DELETE n,r
 
+// Get product recommendation
 MATCH (c1:Customer)-[:BOUGHT]->(p1:Product)<-[:BOUGHT]-(c2:Customer)-[:BOUGHT]->(p2:Product)
 WITH c1, c2, COUNT(p1) AS NrInCommon, COLLECT(p1) AS InCommon, p2
 WHERE NOT((c1)-[:BOUGHT]->(p2)) AND NrInCommon > 4
