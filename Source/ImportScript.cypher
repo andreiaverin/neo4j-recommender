@@ -1,5 +1,5 @@
 // Import sample data
-LOAD CSV WITH HEADERS FROM "file:///https://github.com/andreiaverin/neo4j-recommender/blob/master/Source/SampleData.csv" AS line FIELDTERMINATOR ';'
+LOAD CSV WITH HEADERS FROM "https://github.com/andreiaverin/neo4j-recommender/raw/master/Source/SampleData.csv" AS line FIELDTERMINATOR ';'
 MERGE (c:Customer { name:line.firstName + ' ' + line.lastName })
 MERGE (p:Product { name:line.productName })
 MERGE (cat:Category { name:line.categoryName })
